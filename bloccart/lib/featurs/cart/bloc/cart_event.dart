@@ -5,4 +5,8 @@ abstract class CartEvent {}
 
 class CartIntialEvent extends CartEvent {}
 
-class CartRemoverEvent extends CartEvent {}
+class CartRemoverEvent extends CartEvent {
+  final ProductDataModel productDataModel;
+
+  CartRemoverEvent({required this.productDataModel});
+}

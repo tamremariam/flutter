@@ -12,11 +12,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartInitial()) {
     on<CartEvent>((event, emit) {
       on<CartIntialEvent>(cartIntialEvent);
+      on<CartRemoverEvent>(cartRemoverEvent);
     });
   }
 
   FutureOr<void> cartIntialEvent(
       CartIntialEvent event, Emitter<CartState> emit) {
+    emit(CartSucessState(cartitems: cartitems));
+  }
+
+  FutureOr<void> cartRemoverEvent(
+      CartRemoverEvent event, Emitter<CartState> emit) {
+    cartitems.remove(event.productDataModel);
     emit(CartSucessState(cartitems: cartitems));
   }
 }

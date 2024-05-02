@@ -27,24 +27,28 @@ class _cartState extends State<cart> {
       ),
       body: BlocConsumer<CartBloc, CartState>(
         bloc: cartBloc,
+        listener: (context, state) {},
         listenWhen: (previous, current) => current is CartActionState,
         buildWhen: (previous, current) => current is! CartActionState,
-        listener: (context, state) {
-          // TODO: implement listener
-        },
         builder: (context, state) {
           switch (state.runtimeType) {
             case CartSucessState:
               final successstate = state as CartSucessState;
-              return ListView.builder(
-                  itemCount: successstate.cartitems.length,
-                  itemBuilder: (context, index) {
-                    return CartTileWidget(
-                        cartBloc: cartBloc,
-                        productDataModel: successstate.cartitems[index]);
-                  });
+              return Scaffold();
+            // ListView.builder(
+            // itemCount: successstate.cartitems.length,
+            // itemBuilder: (context, index) {
+            //   return CartTileWidget(
+            //       cartBloc: cartBloc,
+            //       productDataModel: successstate.cartitems[index]);
+            // });
+
             default:
-              return SizedBox();
+              return const Scaffold(
+                body: Center(
+                  child: Text("error ocured"),
+                ),
+              );
           }
         },
       ),
