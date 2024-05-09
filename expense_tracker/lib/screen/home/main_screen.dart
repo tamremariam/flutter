@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:expense_tracker/data/data.dart';
+import 'package:expense_tracker/screen/home/widgets/IncomeOutcome.dart';
+import 'package:expense_tracker/screen/home/widgets/transactionTitle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -103,6 +106,9 @@ class MainScreen extends StatelessWidget {
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 30)),
+                  const SizedBox(
+                    height: 25,
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
@@ -119,97 +125,91 @@ class MainScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Transaction",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    showAboutDialog(context: context);
-                  },
-                  child: Text(
-                    "View All",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16),
-                  ),
-                ),
-              ],
+            const transactionTitle(
+                firsTitle: "transaction", secondTitle: "View All"),
+            const SizedBox(
+              height: 20,
             ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: transactionsData.length,
+                  itemBuilder: (context, int i) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: transactionsData[i]
+                                                ['color']),
+                                      ),
+                                      Icon(Icons.home)
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    transactionsData[i]['name'],
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    transactionsData[i]['totalAmount'],
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
+                                  ),
+                                  // const SizedBox(
+                                  //   height: 4,
+                                  // ),
+                                  Text(
+                                    transactionsData[i]['date'],
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+            )
           ],
         ),
       ),
-    );
-  }
-}
-
-class IncomeOutcome extends StatelessWidget {
-  final String transactionType;
-  final double amount;
-
-  const IncomeOutcome({
-    super.key,
-    required this.transactionType,
-    required this.amount,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: const BoxDecoration(
-                  color: Colors.white30, shape: BoxShape.circle),
-            ),
-            if (transactionType == "expence")
-              const Icon(
-                CupertinoIcons.arrow_up,
-                size: 12,
-                color: Colors.red,
-              ),
-            if (transactionType == "income")
-              const Icon(
-                CupertinoIcons.arrow_down,
-                size: 12,
-                color: Colors.green,
-              )
-          ],
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Column(
-          children: [
-            Text(
-              transactionType,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16),
-            ),
-            Text(
-              amount.toString(),
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16),
-            ),
-          ],
-        )
-      ],
     );
   }
 }
