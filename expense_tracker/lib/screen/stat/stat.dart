@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:expense_tracker/data/data.dart';
+import 'package:expense_tracker/screen/stat/chartes/chart_year.dart';
 import 'package:expense_tracker/widgets/tabbar.dart';
 import 'package:expense_tracker/widgets/transactionTitle.dart';
-import 'package:expense_tracker/screen/stat/chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -119,32 +119,25 @@ class _StatScreenState extends State<StatScreen> with TickerProviderStateMixin {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
                 child: TabBar(
-                    automaticIndicatorColorAdjustment: false,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    dividerColor: Colors.transparent,
                     indicator: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Theme.of(context).colorScheme.primary,
-                            Theme.of(context).colorScheme.secondary,
-                            Theme.of(context).colorScheme.tertiary,
-                          ],
-                          transform: const GradientRotation(pi /
-                              4)), // Set the background color of the selected tab
-                      borderRadius: BorderRadius.circular(
-                          15), // Optional: Set border radius
+                      gradient: LinearGradient(colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).colorScheme.tertiary,
+                      ], transform: const GradientRotation(pi / 4)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    controller: _tabController,
                     labelColor: Colors.white,
-                    labelStyle: const TextStyle(
-                      fontSize: 25.0, // Set the font size
-                      fontWeight: FontWeight.w300, // Set the font weight
-                      // Set the text color
-                    ),
+                    unselectedLabelColor: Colors.black54,
+                    controller: _tabController,
                     tabs: const [
                       Tab(
-                        text: "        Income        ",
+                        text: "Income",
                       ),
                       Tab(
-                        text: "        Expense            ",
+                        text: "Expense",
                       )
                     ])),
           ),
@@ -222,7 +215,7 @@ class DisplayChart extends StatelessWidget {
                     bottomEnd: Radius.circular(30))),
             child: const Padding(
               padding: EdgeInsets.all(20.0),
-              child: MyChart(),
+              child: MyChartYear(),
             ),
           ),
         ],

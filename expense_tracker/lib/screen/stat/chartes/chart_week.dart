@@ -2,14 +2,14 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class MyChart extends StatefulWidget {
-  const MyChart({super.key});
+class MyChartWeek extends StatefulWidget {
+  const MyChartWeek({super.key});
 
   @override
-  State<MyChart> createState() => _MyChartState();
+  State<MyChartWeek> createState() => _MyChartState();
 }
 
-class _MyChartState extends State<MyChart> {
+class _MyChartState extends State<MyChartWeek> {
   @override
   Widget build(BuildContext context) {
     return BarChart(
