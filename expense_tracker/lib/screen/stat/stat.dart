@@ -1,12 +1,33 @@
+import 'dart:math';
+
 import 'package:expense_tracker/data/data.dart';
-import 'package:expense_tracker/screen/home/widgets/transactionTitle.dart';
+import 'package:expense_tracker/widgets/tabbar.dart';
+import 'package:expense_tracker/widgets/transactionTitle.dart';
 import 'package:expense_tracker/screen/stat/chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class StatScreen extends StatelessWidget {
+class StatScreen extends StatefulWidget {
   const StatScreen({super.key});
+
+  @override
+  State<StatScreen> createState() => _StatScreenState();
+}
+
+class _StatScreenState extends State<StatScreen> with TickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +109,82 @@ class StatScreen extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15.0),
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 55,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                child: TabBar(
+                    automaticIndicatorColorAdjustment: false,
+                    indicator: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
+                            Theme.of(context).colorScheme.tertiary,
+                          ],
+                          transform: const GradientRotation(pi /
+                              4)), // Set the background color of the selected tab
+                      borderRadius: BorderRadius.circular(
+                          15), // Optional: Set border radius
+                    ),
+                    controller: _tabController,
+                    labelColor: Colors.white,
+                    labelStyle: const TextStyle(
+                      fontSize: 25.0, // Set the font size
+                      fontWeight: FontWeight.w300, // Set the font weight
+                      // Set the text color
+                    ),
+                    tabs: const [
+                      Tab(
+                        text: "        Income        ",
+                      ),
+                      Tab(
+                        text: "        Expense            ",
+                      )
+                    ])),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width * 0.9,
+            child: TabBarView(
+              controller: _tabController,
+              children: [DisplayChart(), NestedTabBar("beforwors")],
+            ),
+          ),
+          // const SizedBox(
+          //   height: 20,
+          // ),
+          const transactionTitle(
+              firsTitle: "Sat, 20 May 2024", secondTitle: "View All"),
+          const SizedBox(
+            height: 20,
+          ),
+          const listviewtransaction(),
+        ],
+      ),
+    ));
+  }
+}
+
+class DisplayChart extends StatelessWidget {
+  const DisplayChart({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
           Container(
             width: MediaQuery.of(context).size.width,
             // height: MediaQuery.of(context).size.width*,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadiusDirectional.only(
                     topStart: Radius.circular(30),
@@ -102,16 +195,16 @@ class StatScreen extends StatelessWidget {
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "welcome",
+                    "Weakly",
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.outline),
                   ),
                   Text(
-                    "Tamre",
+                    "\$ 250",
                     style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onBackground),
                   ),
@@ -121,7 +214,7 @@ class StatScreen extends StatelessWidget {
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.width * 0.6,
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadiusDirectional.only(
@@ -132,83 +225,83 @@ class StatScreen extends StatelessWidget {
               child: MyChart(),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          const transactionTitle(
-              firsTitle: "Sat, 20 May 2024", secondTitle: "View All"),
-          const SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: transactionsData.length,
-                itemBuilder: (context, int i) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: transactionsData[i]['color']),
-                                    ),
-                                    Icon(Icons.home)
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  transactionsData[i]['name'],
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  transactionsData[i]['totalAmount'],
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14),
-                                ),
-                                // const SizedBox(
-                                //   height: 4,
-                                // ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-          )
         ],
       ),
-    ));
+    );
+  }
+}
+
+class listviewtransaction extends StatelessWidget {
+  const listviewtransaction({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+          itemCount: transactionsData.length,
+          itemBuilder: (context, int i) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: transactionsData[i]['color']),
+                              ),
+                              Icon(Icons.home)
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            transactionsData[i]['name'],
+                            style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            transactionsData[i]['totalAmount'],
+                            style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14),
+                          ),
+                          // const SizedBox(
+                          //   height: 4,
+                          // ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+    );
   }
 }

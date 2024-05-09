@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:expense_tracker/data/data.dart';
-import 'package:expense_tracker/screen/home/widgets/IncomeOutcome.dart';
-import 'package:expense_tracker/screen/home/widgets/transactionTitle.dart';
+import 'package:expense_tracker/widgets/IncomeOutcome.dart';
+import 'package:expense_tracker/widgets/transactionTitle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -114,8 +114,8 @@ class MainScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        IncomeOutcome(transactionType: "income", amount: 3000),
                         IncomeOutcome(transactionType: "expence", amount: 2000),
-                        IncomeOutcome(transactionType: "income", amount: 3000)
                       ],
                     ),
                   ),

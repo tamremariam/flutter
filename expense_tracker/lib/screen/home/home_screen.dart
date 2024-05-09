@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Index = value;
             });
           },
+
           backgroundColor: Colors.white,
           showSelectedLabels: false,
           showUnselectedLabels: false,
