@@ -146,12 +146,17 @@ class _StatScreenState extends State<StatScreen> with TickerProviderStateMixin {
             height: MediaQuery.of(context).size.width * 0.9,
             child: TabBarView(
               controller: _tabController,
-              children: [DisplayChart(), NestedTabBar("beforwors")],
+              children: const [
+                // DisplayChart(),
+                // DisplayChart(),
+                NestedTabBar("beforwors"),
+                NestedTabBar("beforwors")
+              ],
             ),
           ),
-          // const SizedBox(
-          //   height: 20,
-          // ),
+          const SizedBox(
+            height: 20,
+          ),
           const transactionTitle(
               firsTitle: "Sat, 20 May 2024", secondTitle: "View All"),
           const SizedBox(

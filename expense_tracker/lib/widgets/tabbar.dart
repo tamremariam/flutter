@@ -2,6 +2,7 @@ import 'package:expense_tracker/screen/stat/chartes/chart_Day.dart';
 import 'package:expense_tracker/screen/stat/chartes/chart_month.dart';
 import 'package:expense_tracker/screen/stat/chartes/chart_week.dart';
 import 'package:expense_tracker/screen/stat/chartes/chart_year.dart';
+import 'package:expense_tracker/screen/stat/chartes/line_chart_sample1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -42,19 +43,44 @@ class _NestedTabBarState extends State<NestedTabBar>
               borderRadius: BorderRadiusDirectional.only(
                   topStart: Radius.circular(30), topEnd: Radius.circular(30))),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15.0),
+            padding: const EdgeInsets.symmetric(vertical: 0),
             child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   child: TabBar.secondary(
+                    tabAlignment: TabAlignment.center,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorColor: Colors.black,
                     controller: _tabController,
                     tabs: const <Widget>[
                       Tab(text: 'Day'),
                       Tab(text: 'Week'),
                       Tab(text: 'Month'),
                       Tab(text: 'Year'),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("this is where i select time");
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "today",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.outline),
+                      ),
+                      Icon(Icons.expand_more,
+                          color: Theme.of(context).colorScheme.outline)
                     ],
                   ),
                 ),
@@ -73,6 +99,7 @@ class _NestedTabBarState extends State<NestedTabBar>
           child: TabBarView(
             controller: _tabController,
             children: <Widget>[
+              // BarChartSample1(),
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.width * 0.6,
@@ -169,6 +196,86 @@ class DisplayChart extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// import 'package:flutter/material.dart';
+
+class CustomTabBar extends StatelessWidget {
+  final TabController tabController;
+  final List<String> tabTexts;
+
+  CustomTabBar({required this.tabController, required this.tabTexts});
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBar(
+      controller: tabController,
+      tabs: tabTexts.map((text) => Tab(text: text)).toList(),
+      indicator: CustomTabIndicator(
+        tabController: tabController,
+        tabTexts: tabTexts,
+      ),
+    );
+  }
+}
+
+class CustomTabIndicator extends Decoration {
+  final TabController tabController;
+  final List<String> tabTexts;
+
+  CustomTabIndicator({required this.tabController, required this.tabTexts});
+
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+    return _CustomTabIndicatorPainter(
+      tabController: tabController,
+      tabTexts: tabTexts,
+      onChanged: onChanged,
+    );
+  }
+}
+
+class _CustomTabIndicatorPainter extends BoxPainter {
+  final TabController tabController;
+  final List<String> tabTexts;
+
+  _CustomTabIndicatorPainter({
+    required this.tabController,
+    required this.tabTexts,
+    VoidCallback? onChanged,
+  }) : super(onChanged);
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    final List<double> tabWidths = tabTexts.map((text) {
+      final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      return textPainter.width;
+    }).toList();
+
+    final double totalWidth = tabWidths.reduce((a, b) => a + b);
+    final double tabWidth = totalWidth / tabWidths.length;
+
+    final double indicatorWidth = tabWidth - 16; // Adjust padding as needed
+
+    final double indicatorPosition =
+        tabController.index * tabWidth + (tabWidth - indicatorWidth) / 2;
+
+    final Paint paint = Paint()
+      ..color = Colors.blue // Change color as needed
+      ..strokeWidth = 4 // Adjust thickness as needed
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawLine(
+      offset.translate(
+          offset.dx + indicatorPosition, configuration.size!.height - 4),
+      offset.translate(offset.dx + indicatorPosition + indicatorWidth,
+          configuration.size!.height - 4),
+      paint,
     );
   }
 }
