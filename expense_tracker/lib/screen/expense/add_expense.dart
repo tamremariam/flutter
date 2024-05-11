@@ -1,10 +1,9 @@
-import 'dart:ffi';
 import 'dart:math';
 
-import 'package:expense_tracker/widgets/appbar.dart';
+import 'package:expense_tracker/screen/expense/add_catagory.dart';
+import 'package:expense_tracker/widgets/notification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddExpense extends StatelessWidget {
@@ -57,7 +56,10 @@ class AddExpense extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    onTap: () {},
+                    onTap: () {
+                      MyFragment();
+                    },
+                    readOnly: true,
                     decoration: InputDecoration(
                       hintText: "Catagory",
                       filled: true,
@@ -66,10 +68,16 @@ class AddExpense extends StatelessWidget {
                         FontAwesomeIcons.list,
                         color: Theme.of(context).colorScheme.outline,
                       ),
-                      suffixIcon: Icon(
-                        Icons.add,
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const AddCatagoryFragment();
+                              },
+                            );
+                          },
+                          icon: const Icon(CupertinoIcons.add)),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide:
